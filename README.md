@@ -37,3 +37,6 @@ or
 go run MariaDB-TableSpec.go -host="127.0.0.1" -port="3306" -user="root" -password="root" -database="mysql" -file="mysql_table.xlsx"
 ```
 > go run 실행시 위의 필요 패키지는 설치되어있어야 합니다. 
+
+## Output File
+![ex_output](./img/ex_Output.png)
