@@ -1,4 +1,6 @@
+![ex_screenshot](./img/MariaDB-Tablespec-logo.png)
 # mariadb-tablespec
+
 MariaDB 테이블에 대한 명세표 생성(xlsx) 프로그램 입니다. 
 
 
