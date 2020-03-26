@@ -1,7 +1,7 @@
 ![ex_screenshot](./img/MariaDB-Tablespec-logo.png)
 # mariadb-tablespec
-
 MariaDB 테이블에 대한 명세표 생성(xlsx) 프로그램 입니다. 
+컬럼 및 엔진 정보, FK / INDEX 정보를 확인할 수 있습니다. 
 
 ## Version
 ### 1.0
