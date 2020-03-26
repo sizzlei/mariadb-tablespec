@@ -1,15 +1,15 @@
 ![ex_screenshot](./img/MariaDB-Tablespec-logo.png)
 # mariadb-tablespec
-MariaDB 테이블에 대한 명세표 생성(xlsx) 프로그램 입니다. 
-컬럼 및 엔진 정보, FK / INDEX 정보를 확인할 수 있습니다. 
+This is Table Specification for MariaDB.
+
 
 ## Version
 ### 1.0
-+ 프로그램 개발 및 테스트 진행
++ Build Up & Test.
 
 ### 1.1
-+ Foreign Key 에 대한 Delete_rule / Update_rule 추가
-+ Dependeny Package 관리를 위해 Glide 추가
++ Add Update Rule and Delete Rule for FK.
++ Add Glide (Dependency Management)
 
 ## Use Package 
 ```
@@ -43,7 +43,7 @@ or
 ```
 go run MariaDB-TableSpec.go -host="127.0.0.1" -port="3306" -user="root" -password="root" -database="mysql" -file="mysql_table.xlsx"
 ```
-> go run 실행시 위의 필요 패키지는 설치되어있어야 합니다. 
+> If you ' go run ' or build , you have to do dependency Package Install
 
 ## Output File
 ![ex_output](./img/ex_Output.png)
