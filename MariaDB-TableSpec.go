@@ -10,12 +10,12 @@ import (
 
 func main() {
 	
-	srvhost := flag.String("host","","Target Database Host.")
+	srvhost := flag.String("host","localhost","Target Database Host.")
 	srvport := flag.String("port","3306","Target Database Port.")
 	srvuser := flag.String("user","root","Database Connect User.")
 	srvpass := flag.String("password","","Database Connect Password.")
-	xlsfile := flag.String("file","","Export File Path and Name.")
-	srvdb := flag.String("database","","Export for Database.")
+	xlsfile := flag.String("file","default.xlsx","Export File Path and Name.")
+	srvdb := flag.String("database","mysql","Export for Database.")
 
 	flag.Parse()
 
@@ -59,6 +59,8 @@ func main() {
 		const_key	string
 		const_col	string
 		const_refer	sql.NullString
+		const_del	string
+		const_upd	string
 	}
 
 	var dvConst colConst
@@ -255,18 +257,20 @@ func main() {
 		exFile.SetCellValue(srvDB,fmt.Sprintf("A%d",colRownum),"Foreign Key Info")
 		colRownum += 1
 
-		constDiv := []string{"A","D","F"}
-		constNames := []string{"Name","Column","Referance"}
+		constDiv := []string{"A","D","E","I","J"}
+		constNames := []string{"Name","Column","Referance","DELETE","UPDATE"}
 
 		// Merge Cell
 		exFile.MergeCell(srvDB, fmt.Sprintf("A%d",colRownum), fmt.Sprintf("C%d",colRownum))
-		exFile.MergeCell(srvDB, fmt.Sprintf("D%d",colRownum), fmt.Sprintf("E%d",colRownum))
-		exFile.MergeCell(srvDB, fmt.Sprintf("F%d",colRownum), fmt.Sprintf("J%d",colRownum))
+		exFile.MergeCell(srvDB, fmt.Sprintf("D%d",colRownum), fmt.Sprintf("D%d",colRownum))
+		exFile.MergeCell(srvDB, fmt.Sprintf("E%d",colRownum), fmt.Sprintf("H%d",colRownum))
 
 		// Style 
 		exFile.SetCellStyle(srvDB, fmt.Sprintf("A%d",colRownum), fmt.Sprintf("C%d",colRownum),exTitle)
-		exFile.SetCellStyle(srvDB, fmt.Sprintf("D%d",colRownum), fmt.Sprintf("E%d",colRownum),exTitle)
-		exFile.SetCellStyle(srvDB, fmt.Sprintf("F%d",colRownum), fmt.Sprintf("J%d",colRownum),exTitle)
+		exFile.SetCellStyle(srvDB, fmt.Sprintf("D%d",colRownum), fmt.Sprintf("D%d",colRownum),exTitle)
+		exFile.SetCellStyle(srvDB, fmt.Sprintf("E%d",colRownum), fmt.Sprintf("H%d",colRownum),exTitle)
+		exFile.SetCellStyle(srvDB, fmt.Sprintf("I%d",colRownum), fmt.Sprintf("I%d",colRownum),exTitle)
+		exFile.SetCellStyle(srvDB, fmt.Sprintf("J%d",colRownum), fmt.Sprintf("J%d",colRownum),exTitle)
 
 		for idx, constNm := range constNames {
 			exFile.SetCellValue(srvDB,fmt.Sprintf("%s%d",constDiv[idx],colRownum),constNm)
@@ -274,7 +278,7 @@ func main() {
 		colRownum += 1
 
 		// Get Constraint
-		var getConstFormat string = "SELECT constraint_name AS constraint_key,group_concat(column_name) AS con_column,concat(referenced_table_schema,'.',referenced_table_name,' : ',referenced_column_name) AS refer_info FROM information_schema.KEY_COLUMN_USAGE WHERE CONSTRAINT_SCHEMA='%s' AND table_name='%s' AND constraint_name<> 'PRIMARY' GROUP BY constraint_name"
+		var getConstFormat string = "SELECT x.constraint_name AS constraint_key,group_concat(x.column_name) AS con_column,concat(x.referenced_table_name,'.',x.referenced_column_name) AS refer_info,y.DELETE_RULE,y.UPDATE_RULE FROM information_schema.KEY_COLUMN_USAGE x INNER JOIN information_schema.REFERENTIAL_CONSTRAINTS y ON x.constraint_name=y.constraint_name WHERE x.CONSTRAINT_SCHEMA='%s' AND x.table_name='%s' AND x.constraint_name<> 'PRIMARY' GROUP BY x.constraint_name"
 		var getConst string = fmt.Sprintf(getConstFormat,dvTB.schema,dvTB.table_nm)
 		constRows, err := dbCon.Query(getConst)
 		if err != nil {
@@ -284,24 +288,28 @@ func main() {
 
 		// Constraint Insert
 		for constRows.Next() {
-			err := constRows.Scan(&dvConst.const_key,&dvConst.const_col,&dvConst.const_refer)
+			err := constRows.Scan(&dvConst.const_key,&dvConst.const_col,&dvConst.const_refer,&dvConst.const_del,&dvConst.const_upd)
 			if err != nil {
 				panic(err)
 			}
 			if dvConst.const_refer.Valid {
 				// Merge cell
 				exFile.MergeCell(srvDB, fmt.Sprintf("A%d",colRownum), fmt.Sprintf("C%d",colRownum))
-				exFile.MergeCell(srvDB, fmt.Sprintf("D%d",colRownum), fmt.Sprintf("E%d",colRownum))
-				exFile.MergeCell(srvDB, fmt.Sprintf("F%d",colRownum), fmt.Sprintf("J%d",colRownum))
+				exFile.MergeCell(srvDB, fmt.Sprintf("D%d",colRownum), fmt.Sprintf("D%d",colRownum))
+				exFile.MergeCell(srvDB, fmt.Sprintf("E%d",colRownum), fmt.Sprintf("H%d",colRownum))
 
 				// Style 
 				exFile.SetCellStyle(srvDB, fmt.Sprintf("A%d",colRownum), fmt.Sprintf("C%d",colRownum),exCont)
-				exFile.SetCellStyle(srvDB, fmt.Sprintf("D%d",colRownum), fmt.Sprintf("E%d",colRownum),exCont)
-				exFile.SetCellStyle(srvDB, fmt.Sprintf("F%d",colRownum), fmt.Sprintf("J%d",colRownum),exCont)
+				exFile.SetCellStyle(srvDB, fmt.Sprintf("D%d",colRownum), fmt.Sprintf("D%d",colRownum),exCont)
+				exFile.SetCellStyle(srvDB, fmt.Sprintf("E%d",colRownum), fmt.Sprintf("H%d",colRownum),exCont)
+				exFile.SetCellStyle(srvDB, fmt.Sprintf("I%d",colRownum), fmt.Sprintf("I%d",colRownum),exCont)
+				exFile.SetCellStyle(srvDB, fmt.Sprintf("J%d",colRownum), fmt.Sprintf("J%d",colRownum),exCont)
 
 				exFile.SetCellValue(srvDB,fmt.Sprintf("A%d",colRownum),dvConst.const_key)
 				exFile.SetCellValue(srvDB,fmt.Sprintf("D%d",colRownum),dvConst.const_col)
-				exFile.SetCellValue(srvDB,fmt.Sprintf("F%d",colRownum),dvConst.const_refer.String)
+				exFile.SetCellValue(srvDB,fmt.Sprintf("E%d",colRownum),dvConst.const_refer.String)
+				exFile.SetCellValue(srvDB,fmt.Sprintf("I%d",colRownum),dvConst.const_del)
+				exFile.SetCellValue(srvDB,fmt.Sprintf("J%d",colRownum),dvConst.const_upd)
 				colRownum += 1
 			}
 			

@@ -1,0 +1,36 @@
+hash: 800ed25ce10d6ba4ac8875aae7733130fa105d581867549a9dfd18ff70bd5faf
+updated: 2020-03-26T13:05:30.5772793+09:00
+imports:
+- name: github.com/360EntSecGroup-Skylar/excelize
+  version: e51aff2d9562bbfb290ef76a948facb6d4660eff
+- name: github.com/go-sql-driver/mysql
+  version: 17ef3dd9d98b69acec3e85878995ada9533a9370
+- name: github.com/mohae/deepcopy
+  version: c48cc78d482608239f6c4c92a4abd87eb8761c90
+- name: golang.org/x/net
+  version: d3edc9973b7eb1fb302b0ff2c62357091cea9a30
+  subpackages:
+  - html
+  - html/atom
+  - html/charset
+- name: golang.org/x/text
+  version: 06d492aade888ab8698aad35476286b7b555c961
+  subpackages:
+  - encoding
+  - encoding/charmap
+  - encoding/htmlindex
+  - encoding/internal
+  - encoding/internal/identifier
+  - encoding/japanese
+  - encoding/korean
+  - encoding/simplifiedchinese
+  - encoding/traditionalchinese
+  - encoding/unicode
+  - internal/language
+  - internal/language/compact
+  - internal/tag
+  - internal/utf8internal
+  - language
+  - runes
+  - transform
+testImports: []

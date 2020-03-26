@@ -1,0 +1,6 @@
+package: .
+import:
+- package: github.com/360EntSecGroup-Skylar/excelize
+  version: ~2.1.0
+- package: github.com/go-sql-driver/mysql
+  version: ~1.5.0

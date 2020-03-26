@@ -3,11 +3,18 @@
 
 MariaDB 테이블에 대한 명세표 생성(xlsx) 프로그램 입니다. 
 
+## Version
+### 1.0
++ 프로그램 개발 및 테스트 진행
+
+### 1.1
++ Foreign Key 에 대한 Delete_rule / Update_rule 추가
++ Dependeny Package 관리를 위해 Glide 추가
 
 ## Use Package 
 ```
-"github.com/360EntSecGroup-Skylar/excelize"
-"github.com/go-sql-driver/mysql"
+go get github.com/360EntSecGroup-Skylar/excelize
+go get github.com/go-sql-driver/mysql
 ```
 
 ## Arg
