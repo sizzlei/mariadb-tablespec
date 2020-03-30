@@ -7,6 +7,43 @@ import (
 	"github.com/360EntSecGroup-Skylar/excelize"
 )
 
+type dbTable struct {
+	schema 		string
+	table_nm 	string
+	table_type 	string
+	engine		string
+	row_format 	string
+	collation 	string
+	comment 	sql.NullString
+}
+
+type tbColumn struct {
+	col_nm 		string
+	col_default sql.NullString
+	nullable	string
+	col_type	string
+	col_length	sql.NullInt64
+	charset		sql.NullString
+	collation	sql.NullString
+	colkey		sql.NullString
+	extra		sql.NullString
+	comment		sql.NullString
+}
+
+type colConst struct {
+	const_key	string
+	const_col	string
+	const_refer	sql.NullString
+	const_del	string
+	const_upd	string
+}
+
+
+type colIndex struct {
+	idx_nm		string
+	idx_unique	int
+	idx_col		string
+}
 
 func main() {
 	
@@ -27,50 +64,10 @@ func main() {
 	var xlsFile string = *xlsfile
 	var srvDB string = *srvdb
 
-	// Declare Table
-	type dbTable struct {
-		schema 		string
-		table_nm 	string
-		table_type 	string
-		engine		string
-		row_format 	string
-		collation 	string
-		comment 	sql.NullString
-	}
-
+	// Declare Table	
 	var dvTB dbTable
-
-	type tbColumn struct {
-		col_nm 		string
-		col_default sql.NullString
-		nullable	string
-		col_type	string
-		col_length	sql.NullInt64
-		charset		sql.NullString
-		collation	sql.NullString
-		colkey		sql.NullString
-		extra		sql.NullString
-		comment		sql.NullString
-	}
-
 	var dvCol tbColumn
-
-	type colConst struct {
-		const_key	string
-		const_col	string
-		const_refer	sql.NullString
-		const_del	string
-		const_upd	string
-	}
-
 	var dvConst colConst
-
-	type colIndex struct {
-		idx_nm		string
-		idx_unique	int
-		idx_col		string
-	}
-
 	var dvIdx colIndex
 	// database Connection
 	var dnsFormat string = "%s:%s@tcp(%s:%s)/information_schema"
@@ -206,6 +203,7 @@ func main() {
 			}
 			// fmt.Println("Column : ", dvCol.col_nm,dvCol.col_type,dvCol.col_length,dvCol.comment)
 			colNum += 1
+
 			exFile.SetCellValue(srvDB,fmt.Sprintf("A%d",colRownum),colNum)
 			// Column Name
 			exFile.SetCellValue(srvDB,fmt.Sprintf("B%d",colRownum),dvCol.col_nm)
